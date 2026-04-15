@@ -81,14 +81,6 @@ plugins:
             show_signature_annotations: true
             signature_crossrefs: true
             separate_signature: false
-          import:
-            - https://docs.python.org/3/objects.inv
-            - https://numpy.org/doc/stable/objects.inv
-            - https://pytorch.org/docs/stable/objects.inv
-            - https://pytorch.org/data/main/objects.inv
-            - https://pytorch-geometric.readthedocs.io/en/latest/objects.inv
-            - https://lightning.ai/docs/pytorch/stable/objects.inv
-            - https://networkx.org/documentation/stable/objects.inv
 
 markdown_extensions:
   - toc:
