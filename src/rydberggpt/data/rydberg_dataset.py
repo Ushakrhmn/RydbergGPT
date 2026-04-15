@@ -12,9 +12,12 @@ from torch.utils.data.datapipes.iter import FileLister
 from rydberggpt.data.dataclasses import Batch, custom_collate
 from rydberggpt.data.utils_graph import pyg_graph_data
 from rydberggpt.utils import to_one_hot
+import json
 
 logging.basicConfig(level=logging.INFO)
-
+def parse_json(sample):
+    _, f = sample
+    return json.load(f)
 
 def get_rydberg_dataloader(
     batch_size: int = 10,
@@ -64,8 +67,8 @@ def build_datapipes(root_dir: str, batch_size: int, buffer_size: int):
         drop_none=True,
         buffer_size=-1,
     )
-    config_dp = config_dp.open_files().parse_json_files()
-    graph_dp = graph_dp.open_files().parse_json_files()
+    config_dp = config_dp.open_files().map(parse_json)
+    graph_dp  = graph_dp.open_files().map(parse_json)
     datapipe = config_dp.zip(dataset_dp).zip(graph_dp).map(map_fn)
     datapipe = datapipe.shuffle()
     datapipe = Buffer(source_datapipe=datapipe, buffer_size=buffer_size)
@@ -104,7 +107,7 @@ class Buffer(IterDataPipe):
             for j in range(i, min(i + self.buffer_size, len(folder_pairs))):
                 config_file, h5_file_path, graph_file = folder_pairs[j]
 
-                pyg_graph = pyg_graph_data(config_file[1], graph_file[1])
+                pyg_graph = pyg_graph_data(config_file, graph_file)
 
                 df = pd.read_hdf(h5_file_path, key="data")
                 for index, _ in df.iterrows():

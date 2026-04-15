@@ -28,7 +28,7 @@ def pyg_graph_data(config, graph_data):
         ],
         dtype=torch.float32,
     )
-    graph_nx = nx.node_link_graph(graph_data)
+    graph_nx = nx.node_link_graph(graph_data, edges="links")
     pyg_graph = networkx_to_pyg_data(graph_nx, node_features)
     return pyg_graph
 
