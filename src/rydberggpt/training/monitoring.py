@@ -3,6 +3,8 @@ import torch
 
 
 def setup_profiler(config, log_path):
+    if config.profiler is None:
+        return None
     # Monitoring
     if config.advanced_monitoring:
         # https://lightning.ai/docs/pytorch/stable/common/trainer.html

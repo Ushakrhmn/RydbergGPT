@@ -90,7 +90,7 @@ def train(
         max_epochs=config.max_epochs,
         callbacks=callbacks,
         logger=tensorboard_logger,
-        profiler=profiler,
+        profiler=None,
         enable_progress_bar=config.prog_bar,
         log_every_n_steps=config.log_every,
         accumulate_grad_batches=config.accumulate_grad_batches,

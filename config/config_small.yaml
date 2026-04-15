@@ -38,11 +38,10 @@ dataset:
 
 rydberg:
   num_states: 2
+profiler: null
 
-profiler: 
-  profiler: "PyTorchProfiler"
-  advanced_monitoring: False # Only for debugging
-  detect_anomaly: False
+advanced_monitoring: False
+detect_anomaly: False
 
 misc:
   seed: 42
