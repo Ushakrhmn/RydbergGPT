@@ -1,0 +1,21 @@
+{
+  "theory": "free_scalar_field",
+  "dimension": 1,
+  "lattice_size": 16,
+  "boundary_condition": "periodic",
+
+  "mass": 1.0,
+  "lattice_spacing": 1.0,
+
+  "beta": null,
+  "interaction": null,
+
+  "data_type": "real_scalar_field",
+  "representation": "node_features",
+
+  "dataset": {
+    "num_samples": 10000,
+    "generator": "gaussian_exact",
+    "covariance": "inverse_laplacian_plus_mass"
+  }
+}
