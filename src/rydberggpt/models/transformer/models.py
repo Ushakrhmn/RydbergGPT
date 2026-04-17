@@ -167,19 +167,21 @@ class Generator(nn.Module):
             vocab_size (int): The size of the vocabulary, which determines the last dimension of the output tensor.
         """
         super(Generator, self).__init__()
-        self.proj = nn.Linear(d_model, vocab_size)  # [batch_size, seq_len, vocab_size]
+        #self.proj = nn.Linear(d_model, vocab_size)  # [batch_size, seq_len, vocab_size]
+        self.proj = nn.Linear(d_model, 1)
+    # def forward(self, x: torch.Tensor) -> torch.Tensor:
+    #     """
+    #     Compute the forward pass of the Generator.
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        """
-        Compute the forward pass of the Generator.
+    #     Args:
+    #         x (torch.Tensor): The input tensor of shape (batch_size, seq_length, d_model).
 
-        Args:
-            x (torch.Tensor): The input tensor of shape (batch_size, seq_length, d_model).
+    #     Returns:
+    #         (torch.Tensor): The output tensor of shape (batch_size, seq_length, vocab_size),
+    #                       with log-softmax applied along the last dimension.
+    #     """
 
-        Returns:
-            (torch.Tensor): The output tensor of shape (batch_size, seq_length, vocab_size),
-                          with log-softmax applied along the last dimension.
-        """
-
-        proj_offset = self.proj(x) + 1e-10
-        return F.log_softmax(proj_offset, dim=-1)  # [batch_size, seq_len, vocab_size]
+    #     proj_offset = self.proj(x) + 1e-10
+    #     return F.log_softmax(proj_offset, dim=-1)  # [batch_size, seq_len, vocab_size]
+    def forward(self, x):
+        return self.proj(x)   # NO softmax

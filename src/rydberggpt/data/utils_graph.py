@@ -7,32 +7,46 @@ from torch_geometric.data import Batch as PyGBatch
 from torch_geometric.data import Data
 
 
+# def pyg_graph_data(config, graph_data):
+#     """
+#     Convert a graph in node-link format to a PyG Data object.
+
+#     Args:
+#         graph_data (Dict): The graph in node-link format.
+#         config_data (Dict): The configuration data for the graph.
+
+#     Returns:
+#         (Data): The graph as a PyG Data object.
+
+#     """
+
+#     delta = float(config.get("lattice_spacing", 0.0))
+#     omega = float(config.get("mass", 0.0))
+#     beta = float(config.get("beta", 0.0) or 0.0)
+#     Rb = 0.0
+#     node_features = torch.tensor(
+#         [delta, omega, beta, Rb],
+#         dtype=torch.float32
+#     )
+#     graph_nx = nx.node_link_graph(graph_data, edges="links")
+#     pyg_graph = networkx_to_pyg_data(graph_nx, node_features)
+#     return pyg_graph
+
 def pyg_graph_data(config, graph_data):
-    """
-    Convert a graph in node-link format to a PyG Data object.
+    import torch
+    from torch_geometric.data import Data
 
-    Args:
-        graph_data (Dict): The graph in node-link format.
-        config_data (Dict): The configuration data for the graph.
+    num_nodes = graph_data["num_nodes"]
+    edges = graph_data["edges"]
 
-    Returns:
-        (Data): The graph as a PyG Data object.
+    # --- Node features (TEMPORARY) ---
+    # Use zeros for now (since no field data exists)
+    x = torch.zeros((num_nodes, 1), dtype=torch.float32)
 
-    """
-    node_features = torch.tensor(
-        [
-            config["delta"],
-            config["omega"],
-            config["beta"],
-            config["Rb"],
-        ],
-        dtype=torch.float32,
-    )
-    graph_nx = nx.node_link_graph(graph_data, edges="links")
-    pyg_graph = networkx_to_pyg_data(graph_nx, node_features)
-    return pyg_graph
+    # --- Edge index ---
+    edge_index = torch.tensor(edges, dtype=torch.long).t().contiguous()
 
-
+    return Data(x=x, edge_index=edge_index)
 def networkx_to_pyg_data(graph: nx.Graph, node_features: torch.Tensor) -> Data:
     """
     Convert a NetworkX graph to a PyTorch Geometric Data object.

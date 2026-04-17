@@ -44,8 +44,12 @@ def get_rydberg_graph_encoder_decoder(config):
             num_layers=config.graph_num_layers,
             dropout=config.dropout,
         ),
-        tgt_embed=nn.Sequential(
-            nn.Linear(config.num_states, config.d_model), c(position)
+        # tgt_embed=nn.Sequential(
+        #     nn.Linear(config.num_states, config.d_model), c(position)
+        # ),
+        tgt_embed = nn.Sequential(
+            nn.Linear(1, config.d_model),
+            position
         ),
         generator=Generator(config.d_model, 2),
         config=config,

@@ -11,7 +11,7 @@ transformer:
 graph_embedding:
   graph_num_layers: 2
   graph_hidden_dim: 64 
-  in_node_dim: 4 # omega delta beta, Rb
+  in_node_dim: 1 #4 # omega delta beta, Rb
 
 training:
   strategy: "auto"

@@ -35,6 +35,7 @@ def get_rydberg_dataloader(
         datapipe,
         batch_size=None,
         num_workers=num_workers,
+        persistent_workers=(num_workers > 0)
     )
 
     return data_loader
@@ -96,8 +97,11 @@ class Buffer(IterDataPipe):
         self.source_datapipe = source_datapipe
         self.buffer_size = buffer_size
 
+        # def get_sample(self, df, idx):
+        #     return torch.tensor(df.iloc[idx]["measurement"], dtype=torch.bool)
     def get_sample(self, df, idx):
-        return torch.tensor(df.iloc[idx]["measurement"], dtype=torch.bool)
+        field = df.iloc[idx]["state"]
+        return torch.tensor(field, dtype=torch.float32).unsqueeze(-1)
 
     def __iter__(self):
         folder_pairs = list(self.source_datapipe)
@@ -111,9 +115,11 @@ class Buffer(IterDataPipe):
 
                 df = pd.read_hdf(h5_file_path, key="data")
                 for index, _ in df.iterrows():
-                    measurement = self.get_sample(df, index)
-                    m_onehot = to_one_hot(measurement, 2)
-                    loaded_data.append(Batch(graph=pyg_graph, m_onehot=m_onehot))
+                    # measurement = self.get_sample(df, index)
+                    # m_onehot = to_one_hot(measurement, 2)
+                    # loaded_data.append(Batch(graph=pyg_graph, m_onehot=m_onehot))
+                    field = self.get_sample(df, index)
+                    loaded_data.append(Batch(graph=pyg_graph, m_onehot=field))
 
             # Shuffle the loaded data for randomness
             random.shuffle(loaded_data)

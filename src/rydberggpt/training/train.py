@@ -29,7 +29,7 @@ def load_data(config, dataset_path: str):
     logging.info(f"Loading data from {dataset_path}...")
     train_loader = get_rydberg_dataloader(
         batch_size=config.batch_size,
-        num_workers=config.num_workers,
+        num_workers= config.num_workers,
         data_path=dataset_path,
         buffer_size=config.buffer_size,
     )
